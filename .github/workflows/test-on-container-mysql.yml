@@ -2,8 +2,8 @@ name: test-mysql
 on: [push]
 jobs:
   linux:
-    container:
-      image: ubuntu:latest
+    #container:
+    #  image: ubuntu:latest
     runs-on: ubuntu-latest
     steps:
       - run: docker run --rm -e MYSQL_RANDOM_ROOT_PASSWORD=true -e MYSQL_USER=TestUser -e MYSQL_PASSWORD=TestPassword -e MYSQL_DATABASE=TestDatabase -d -p 33060:3306 --hostname=mysql --name=mysql mysql:5.7 --port=3306 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --sql-mode=NO_ENGINE_SUBSTITUTION
