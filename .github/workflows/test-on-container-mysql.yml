@@ -1,0 +1,26 @@
+name: test-mysql
+on: [push]
+jobs:
+  linux:
+    container:
+      image: ubuntu:latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cweinberger/github-actions-mysql@master
+        with:
+          version: 5.7 # Optional, default version is `latest`
+          hostPort: 33060 # Optional, default host port is `3306`
+          containerPort: 3306 # Optional, default container port is `3306`
+          user: TestUser # Optional, default is `empty` (⚠️ required if you did not specify a root password)
+          password: TestPassword # Optional, default is `empty` (⚠️ required if you did specify a user)
+          database: TestDatabase # Optional, default is `TestDatabase`
+          characterSet: utf8mb4 # Optional, default is `utf8mb4`
+          collation: utf8mb4_general_ci # Optional, default is `utf8mb4_general_ci`
+          sqlMode: NO_ENGINE_SUBSTITUTION # Optional, default is `empty`
+      - run: apt-get -qq update && apt-get -q -y install iputils-ping netcat
+      - run: ping -c 1 localhost || echo "did fail"
+      - run: ping -c 1 mysql || echo "did fail"
+      - run: nc localhost 33060 || echo "did fail"
+      - run: nc localhost 3306 || echo "did fail"
+      - run: nc mysql 33060 || echo "did fail"
+      - run: nc mysql 3306 || echo "did fail"
